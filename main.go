@@ -24,7 +24,7 @@ func getEnvString(key string, defaultVal string) string {
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		log.Println("WARNING Could not load env, continuing with system variables.")
+		log.Println("WARNING Could not load .env file, continuing with system variables.")
 	}
 
 	serverInfo := server.ServerInfo{
@@ -35,8 +35,8 @@ func main() {
 		Tail:       getEnvString("TAIL", "default"),
 		Version:    getEnvString("VERSION", "0.0.1"),
 	}
-	listenAddress := getEnvString("LISTEN_ADDRESS", "127.0.0.1:8080")
-	solverType := getEnvString("SOLVER", battlesnake.SOLVER_RANDOM)
+	listenAddress := getEnvString("LISTEN_ADDRESS", ":8080")
+	solverType := getEnvString("SOLVER", battlesnake.SOLVER_SAFE)
 
 	solver, err := battlesnake.NewSolver(solverType)
 	if err != nil {

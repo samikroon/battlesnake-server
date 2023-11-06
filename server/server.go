@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/samikroon/battlesnake-server/battlesnake"
+	"github.com/samikroon/battlesnake-server/server/resources"
 )
 
 type ServerInfo struct {
@@ -43,6 +44,8 @@ func NewServer(listenAddress string, info ServerInfo, solver battlesnake.Solver)
 func (s *Server) Run() error {
 	router := mux.NewRouter()
 	router.HandleFunc("/", s.home).Methods(http.MethodGet)
+	router.HandleFunc("/docs", s.redoc).Methods(http.MethodGet)
+	router.HandleFunc("/openapi.json", s.openapi).Methods(http.MethodGet)
 	router.HandleFunc("/start", s.start).Methods(http.MethodPost)
 	router.HandleFunc("/move", s.move).Methods(http.MethodPost)
 	router.HandleFunc("/end", s.end).Methods(http.MethodPost)
@@ -65,6 +68,18 @@ func (s *Server) home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, s.info)
+}
+
+func (s *Server) redoc(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	w.Write(resources.Redoc)
+}
+
+func (s *Server) openapi(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(resources.OpenApiSpec)
 }
 
 func (s *Server) start(w http.ResponseWriter, r *http.Request) {

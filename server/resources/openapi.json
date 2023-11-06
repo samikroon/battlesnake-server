@@ -1,0 +1,494 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Battlesnake Server",
+        "description": "",
+        "version": ""
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Info",
+                "description": "Route used for customization, checking latency, and verifying successful communications between the Battlesnake and the Battlesnake Engine.",
+                "tags": [
+                    "Requests"
+                ],
+                "operationId": "info",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "apiversion": {
+                                            "type": "string",
+                                            "required": true,
+                                            "description": "Version of the Battlesnake API implemented by this Battlesnake. Currently only API version 1 is valid.",
+                                            "example": "1"
+                                        },
+                                        "author": {
+                                            "type": "string",
+                                            "description": "Username of the author of this Battlesnake. If provided, this will be used to verify ownership.",
+                                            "example": "BattlesnakeOfficial"
+                                        },
+                                        "color": {
+                                            "type": "string",
+                                            "description": "Hex color code used to display this Battlesnake. Must start with \"#\" and be 7 characters long.",
+                                            "example": "#888888"
+                                        },
+                                        "head": {
+                                            "type": "string",
+                                            "description": "Displayed head of this Battlesnake.",
+                                            "example": "default"
+                                        },
+                                        "tail": {
+                                            "type": "string",
+                                            "description": "Displayed tail of this Battlesnake.",
+                                            "example": "default"
+                                        },
+                                        "version": {
+                                            "type": "string",
+                                            "description": "A version number or tag for your snake.",
+                                            "example": "0.0.1"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/start": {
+            "post": {
+                "summary": "Start",
+                "description": "Request that the battlesnake client does at the beginning of the game.",
+                "tags": [
+                    "Requests"
+                ],
+                "operationId": "start",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/gameState"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Responses to this enpoint are ignored by the game engine."
+                    }
+                }
+            }
+        },
+        "/move": {
+            "post": {
+                "summary": "Move",
+                "description": "This request will be sent for every turn of the game. The information provided is used to determine the next move of the Battlesnake, which will be either up, down, left or right.",
+                "tags": [
+                    "Requests"
+                ],
+                "operationId": "move",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/gameState"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The Battlesnake's next move",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "move": {
+                                            "type": "string",
+                                            "description": "The next move",
+                                            "example": "up"
+                                        },
+                                        "shout": {
+                                            "type": "string",
+                                            "description": "An optional message sent to all other Battlesnakes on the next turn. Which will be 256 characters or less",
+                                            "example": "I am moving up!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/end": {
+            "post": {
+                "summary": "End",
+                "description": "Request that the battlesnake client does at the end of the game.",
+                "tags": [
+                    "Requests"
+                ],
+                "operationId": "end",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/gameState"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Responses to this enpoint are ignored by the game engine."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "gameState": {
+                "type": "object",
+                "properties": {
+                    "game": {
+                        "type": "object",
+                        "description": "Game Object describing the game being played.",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "A unique identifier for this Game.",
+                                "example": "477ae71f-2bd5-4450-aa86-2d8e2db38c50"
+                            },
+                            "ruleset": {
+                                "type": "object",
+                                "description": "Information about the ruleset being used to run this game.",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Name of the ruleset",
+                                        "example": "solo"
+                                    },
+                                    "version": {
+                                        "type": "string",
+                                        "description": "Version of the ruleset",
+                                        "example": "cli"
+                                    },
+                                    "settings": {
+                                        "type": "object",
+                                        "description": "Settings for this ruleset",
+                                        "properties": {
+                                            "foodSpawnChance": {
+                                                "type": "integer",
+                                                "description": "Chance of food spawning each turn",
+                                                "example": 15
+                                            },
+                                            "minimumFood": {
+                                                "type": "integer",
+                                                "description": "Minimum food required",
+                                                "example": 1
+                                            },
+                                            "hazardDamagePerTurn": {
+                                                "type": "integer",
+                                                "description": "Damage from hazards per turn",
+                                                "example": 14
+                                            },
+                                            "hazardMap": {
+                                                "type": "string",
+                                                "description": "Map of hazards",
+                                                "example": ""
+                                            },
+                                            "hazardMapAuthor": {
+                                                "type": "string",
+                                                "description": "Author of the hazard map",
+                                                "example": ""
+                                            },
+                                            "royale": {
+                                                "type": "object",
+                                                "description": "Royale-specific settings",
+                                                "properties": {
+                                                    "shrinkEveryNTurns": {
+                                                        "type": "integer",
+                                                        "description": "Turns to shrink the map in Royale mode",
+                                                        "example": 25
+                                                    }
+                                                }
+                                            },
+                                            "squad": {
+                                                "type": "object",
+                                                "description": "Squad-specific settings",
+                                                "properties": {
+                                                    "allowBodyCollisions": {
+                                                        "type": "boolean",
+                                                        "description": "Whether body collisions are allowed in squad mode"
+                                                    },
+                                                    "sharedElimination": {
+                                                        "type": "boolean",
+                                                        "description": "Whether shared elimination is allowed in squad mode"
+                                                    },
+                                                    "sharedHealth": {
+                                                        "type": "boolean",
+                                                        "description": "Whether shared health is allowed in squad mode"
+                                                    },
+                                                    "sharedLength": {
+                                                        "type": "boolean",
+                                                        "description": "Whether shared length is allowed in squad mode"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "map": {
+                        "type": "string",
+                        "description": "Type of map being used",
+                        "example": "standard"
+                    },
+                    "timeout": {
+                        "type": "integer",
+                        "description": "Timeout duration in milliseconds",
+                        "example": 500
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "Source information for the game",
+                        "example": ""
+                    },
+                    "turn": {
+                        "type": "integer",
+                        "description": "Current turn number",
+                        "example": 0
+                    },
+                    "board": {
+                        "type": "object",
+                        "description": "Information about the game board",
+                        "properties": {
+                            "height": {
+                                "type": "integer",
+                                "description": "Height of the board",
+                                "example": 11
+                            },
+                            "width": {
+                                "type": "integer",
+                                "description": "Width of the board",
+                                "example": 11
+                            },
+                            "snakes": {
+                                "type": "array",
+                                "description": "List of snakes on the board",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "description": "Unique identifier for the snake"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Name of the snake"
+                                        },
+                                        "latency": {
+                                            "type": "string",
+                                            "description": "Latency information for the snake"
+                                        },
+                                        "health": {
+                                            "type": "integer",
+                                            "description": "Health points of the snake"
+                                        },
+                                        "body": {
+                                            "type": "array",
+                                            "description": "List of body segments of the snake",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "x": {
+                                                        "type": "integer",
+                                                        "description": "X-coordinate of the body segment"
+                                                    },
+                                                    "y": {
+                                                        "type": "integer",
+                                                        "description": "Y-coordinate of the body segment"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "head": {
+                                            "type": "object",
+                                            "description": "Coordinates of the snake's head",
+                                            "properties": {
+                                                "x": {
+                                                    "type": "integer",
+                                                    "description": "X-coordinate of the head"
+                                                },
+                                                "y": {
+                                                    "type": "integer",
+                                                    "description": "Y-coordinate of the head"
+                                                }
+                                            }
+                                        },
+                                        "length": {
+                                            "type": "integer",
+                                            "description": "Length of the snake"
+                                        },
+                                        "shout": {
+                                            "type": "string",
+                                            "description": "Shout message from the snake"
+                                        },
+                                        "squad": {
+                                            "type": "string",
+                                            "description": "Squad information for the snake"
+                                        },
+                                        "customizations": {
+                                            "type": "object",
+                                            "description": "Customizations for the snake",
+                                            "properties": {
+                                                "color": {
+                                                    "type": "string",
+                                                    "description": "Color of the snake"
+                                                },
+                                                "head": {
+                                                    "type": "string",
+                                                    "description": "Head customization of the snake"
+                                                },
+                                                "tail": {
+                                                    "type": "string",
+                                                    "description": "Tail customization of the snake"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "food": {
+                                "type": "array",
+                                "description": "List of food items on the board",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "x": {
+                                            "type": "integer",
+                                            "description": "X-coordinate of the food item"
+                                        },
+                                        "y": {
+                                            "type": "integer",
+                                            "description": "Y-coordinate of the food item"
+                                        }
+                                    }
+                                }
+                            },
+                            "hazards": {
+                                "type": "array",
+                                "description": "List of hazards on the board",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "x": {
+                                            "type": "integer",
+                                            "description": "X-coordinate of the hazard"
+                                        },
+                                        "y": {
+                                            "type": "integer",
+                                            "description": "Y-coordinate of the hazard"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "you": {
+                        "type": "object",
+                        "description": "Information about the player's snake",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "description": "Unique identifier for the player's snake"
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "Name of the player's snake"
+                            },
+                            "latency": {
+                                "type": "string",
+                                "description": "Latency information for the player's snake"
+                            },
+                            "health": {
+                                "type": "integer",
+                                "description": "Health points of the player's snake"
+                            },
+                            "body": {
+                                "type": "array",
+                                "description": "List of body segments of the player's snake",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "x": {
+                                            "type": "integer",
+                                            "description": "X-coordinate of the body segment"
+                                        },
+                                        "y": {
+                                            "type": "integer",
+                                            "description": "Y-coordinate of the body segment"
+                                        }
+                                    }
+                                }
+                            },
+                            "head": {
+                                "type": "object",
+                                "description": "Coordinates of the player's snake's head",
+                                "properties": {
+                                    "x": {
+                                        "type": "integer",
+                                        "description": "X-coordinate of the head"
+                                    },
+                                    "y": {
+                                        "type": "integer",
+                                        "description": "Y-coordinate of the head"
+                                    }
+                                }
+                            },
+                            "length": {
+                                "type": "integer",
+                                "description": "Length of the player's snake"
+                            },
+                            "shout": {
+                                "type": "string",
+                                "description": "Shout message from the player's snake"
+                            },
+                            "squad": {
+                                "type": "string",
+                                "description": "Squad information for the player's snake"
+                            },
+                            "customizations": {
+                                "type": "object",
+                                "description": "Customizations for the player's snake",
+                                "properties": {
+                                    "color": {
+                                        "type": "string",
+                                        "description": "Color of the player's snake"
+                                    },
+                                    "head": {
+                                        "type": "string",
+                                        "description": "Head customization of the player's snake"
+                                    },
+                                    "tail": {
+                                        "type": "string",
+                                        "description": "Tail customization of the player's snake"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
