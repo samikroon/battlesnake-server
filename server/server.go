@@ -44,7 +44,7 @@ type Server struct {
 	server        *http.Server
 }
 
-// NewServer creates a new Server. 
+// NewServer creates a new Server.
 func NewServer(listenAddress string, info ServerInfo, solver battlesnake.Solver) (*Server, error) {
 	infoBytes, err := json.Marshal(info)
 	if err != nil {
@@ -144,7 +144,7 @@ func (s *Server) move(w http.ResponseWriter, r *http.Request) {
 
 	move := s.solver.Move(state)
 
-	responseBody := fmt.Sprintf(`{"move": "%s", "shout": "Moving %s!"}`, move, move) 
+	responseBody := fmt.Sprintf(`{"move": "%s", "shout": "Moving %s!"}`, move, move)
 
 	w.Header().Add("Content-Type", contentTypeJSON)
 	w.WriteHeader(http.StatusOK)
