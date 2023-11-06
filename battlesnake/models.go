@@ -7,14 +7,16 @@ const (
 	MOVE_LEFT  = "left"
 )
 
-var Moves = []string{MOVE_UP, MOVE_RIGHT, MOVE_DOWN, MOVE_LEFT}
+var (
+	Moves = []string{MOVE_UP, MOVE_RIGHT, MOVE_DOWN, MOVE_LEFT}
 
-var MovesMap = map[string]Point{
-	MOVE_UP:    {0, 1},
-	MOVE_RIGHT: {1, 0},
-	MOVE_DOWN:  {0, -1},
-	MOVE_LEFT:  {-1, 0},
-}
+	MovesMap = map[string]Point{
+		MOVE_UP:    {0, 1},
+		MOVE_RIGHT: {1, 0},
+		MOVE_DOWN:  {0, -1},
+		MOVE_LEFT:  {-1, 0},
+	}
+)
 
 type Ruleset struct {
 	Name     string `json:"name"`

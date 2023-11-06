@@ -80,6 +80,23 @@
                 "responses": {
                     "200": {
                         "description": "Responses to this enpoint are ignored by the game engine."
+                    },
+                    "400": {
+                        "description": "An invalid request was sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Describes what was wrong with the request",
+                                            "example": "Invalid JSON body"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -123,6 +140,23 @@
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "An invalid request was sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Describes what was wrong with the request",
+                                            "example": "Invalid JSON body"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -147,6 +181,23 @@
                 "responses": {
                     "200": {
                         "description": "Responses to this enpoint are ignored by the game engine."
+                    },
+                    "400": {
+                        "description": "An invalid request was sent",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "Describes what was wrong with the request",
+                                            "example": "Invalid JSON body"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
