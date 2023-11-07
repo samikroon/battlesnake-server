@@ -76,28 +76,28 @@ func (s *Server) Run() error {
 }
 
 // Shutdown tries to gracefully shutdown the server, on failure, an error is returned.
-func (s *Server) Shutdown() error {
+func (s Server) Shutdown() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 	return s.server.Shutdown(ctx)
 }
 
 // home writes the info JSON string initialized in the server to the ResponseWriter.
-func (s *Server) home(w http.ResponseWriter, r *http.Request) {
+func (s Server) home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", contentTypeJSON)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, s.info)
 }
 
 // redoc writes the docs HTML to the ResponseWriter.
-func (s *Server) redoc(w http.ResponseWriter, r *http.Request) {
+func (s Server) redoc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", contentTypeHTML)
 	w.WriteHeader(http.StatusOK)
 	w.Write(resources.Redoc)
 }
 
 // openapi writes the OpenAPI JSON spec to the ResponseWriter.
-func (s *Server) openapi(w http.ResponseWriter, r *http.Request) {
+func (s Server) openapi(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", contentTypeJSON)
 	w.WriteHeader(http.StatusOK)
 	w.Write(resources.OpenApiSpec)
@@ -106,7 +106,7 @@ func (s *Server) openapi(w http.ResponseWriter, r *http.Request) {
 // start does not have a lot of utility, it validates the request and responds.
 // In case of a validation error, a bad request respoinse is sent (400).
 // In case of successful validation, a succes response is sent (200).
-func (s *Server) start(w http.ResponseWriter, r *http.Request) {
+func (s Server) start(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Content-Type") != contentTypeJSON {
 		handleErrResponse(w, http.StatusBadRequest, errInvalidContentType)
 		return
@@ -130,7 +130,7 @@ func (s *Server) start(w http.ResponseWriter, r *http.Request) {
 // In case of a validation error, a bad request respoinse is sent (400).
 // In case of successful validation, a move is calculated and a succes response is sent (200).
 // The response body contains the move that the client should execute for the Battlesnake.
-func (s *Server) move(w http.ResponseWriter, r *http.Request) {
+func (s Server) move(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Content-Type") != contentTypeJSON {
 		handleErrResponse(w, http.StatusBadRequest, errInvalidContentType)
 		return
@@ -154,7 +154,7 @@ func (s *Server) move(w http.ResponseWriter, r *http.Request) {
 // end does not have a lot of utility, it validates the request and responds.
 // In case of a validation error, a bad request respoinse is sent (400).
 // In case of successful validation, a succes response is sent (200).
-func (s *Server) end(w http.ResponseWriter, r *http.Request) {
+func (s Server) end(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Content-Type") != contentTypeJSON {
 		handleErrResponse(w, http.StatusBadRequest, errInvalidContentType)
 		return
